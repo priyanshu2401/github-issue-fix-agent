@@ -38,3 +38,19 @@ class CodeReader:
                 codebase[str(file)] = content
 
         return codebase
+    
+    def chunk_code(self,codebase,chunk_size=500,overlap=100):
+        chunks = []
+
+        for file_path, content in codebase.items():
+            start = 0
+
+            while start < len(content):
+                chunk = content[start:start + chunk_size]
+                chunks.append({
+                    "file": file_path,
+                    "content": chunk
+                })
+                start += chunk_size - overlap
+
+        return chunks

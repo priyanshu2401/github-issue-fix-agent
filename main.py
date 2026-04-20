@@ -1,8 +1,13 @@
 from agents.code_reader import CodeReader
 
-reader = CodeReader(repo_path=".")
+reader = CodeReader(".")
 codebase = reader.load_codebase()
 
-for path, content in list(codebase.items())[:5]:
-    print(f"\n--- {path} ---\n")
-    print(content[:200])
+chunks = reader.chunk_code(codebase)
+
+print(f"Total chunks: {len(chunks)}")
+
+for chunk in chunks[:3]:
+    print("\n---")
+    print(chunk["file"])
+    print(chunk["content"][:200])
