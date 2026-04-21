@@ -1,6 +1,7 @@
 from agents.code_reader import CodeReader
 from tools.embedding_store import EmbeddingStore
 from tools.retriever import Retriever
+from tools.rag_engine import RAGEngine
 
 reader = CodeReader(".")
 codebase = reader.load_codebase()
@@ -17,13 +18,14 @@ print(f"Total chunks: {len(chunks)}")
 store = EmbeddingStore()
 vector_db = store.store_chunks(chunks)
 
-print("✅ Embeddings stored successfully!")
+rag = RAGEngine()
 
-retriever = Retriever()
+while True:
+    query = input("\nAsk about your codebase: ")
 
-results = retriever.search("read files from directory")
+    if query.lower() in ["exit", "quit", "bye"]:
+        break
 
-for i, doc in enumerate(results):
-    print(f"\n--- Result {i+1} ---")
-    print("File:", doc.metadata.get("file"))
-    print(doc.page_content[:200])
+    answer = rag.answer(query)
+
+    print("\n🤖 Answer:\n", answer)
